@@ -1,0 +1,283 @@
+jenkins+gerrit½Úµã:
+
+echo "StrictHostKeyChecking no" >> /etc/ssh/ssh_config
+cp local.repo  /etc/yum.repos.d/
+yum makecache
+ yum install   mariadb.x86_64 mariadb-libs.x86_64 mariadb-server.x86_64 -y
+[root@localhost yum.repos.d]# systemctl start mariadb
+[root@localhost yum.repos.d]# mysql -u root
+Welcome to the MariaDB monitor.  Commands end with ; or \g.
+Your MariaDB connection id is 2
+Server version: 5.5.50-MariaDB MariaDB Server
+
+Copyright (c) 2000, 2016, Oracle, MariaDB Corporation Ab and others.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+MariaDB [(none)]> create database gerritdb;
+Query OK, 1 row affected (0.00 sec)
+
+MariaDB [(none)]> create user gerrit IDENTIFIED BY 'OStem@00';
+Query OK, 0 rows affected (0.00 sec)
+
+MariaDB [(none)]> grant all privileges on gerritdb.* to 'gerrit'@'localhost' identified by 'OStem@00';
+Query OK, 0 rows affected (0.00 sec)
+
+MariaDB [(none)]> FLUSH privileges
+    -> ;
+Query OK, 0 rows affected (0.00 sec)
+
+MariaDB [(none)]> grant all privileges on *.* to 'root'@'%';
+Query OK, 0 rows affected (0.00 sec)
+
+MariaDB [(none)]> grant all privileges on *.* to 'root'@'localhost';
+Query OK, 0 rows affected (0.00 sec)
+
+MariaDB [(none)]> exit
+Bye
+[root@localhost yum.repos.d]# systemctl enable mariadb
+
+cp mysql-connector-java-5.1.21.jar   /etc/gerrit/gerrit_site/lib/
+java -jar gerrit-2.12.3.war init -d /etc/gerrit/gerrit_site/
+
+yum install gcc gcc-c++ autoconf glibc glibc-devel curl curl-devel ncurses ncurses-devel
+yum install rpm-build
+yum install jenkins.noarch
+yum install java
+systemctl start jenkins
+systemctl enable jenkins
+
+
+mysql -u root
+systemctl enable mariadb
+mkdir -p /etc/gerrit/gerrit_site
+  117  cd /root/liyang/package_ci/
+  118  java -jar gerrit-2.12.3.war init -d /etc/gerrit/gerrit_site/
+  119  ll
+  120  cp mysql-connector-java-5.1.21.jar  
+  121  cp mysql-connector-java-5.1.21.jar   /etc/gerrit/gerrit_site/lib/
+  122  java -jar gerrit-2.12.3.war init -d /etc/gerrit/gerrit_site/
+  123  cd /etc/gerrit/
+  124  ll
+  125  cd gerrit_site/
+  126  ll
+  127  vim etc/gerrit.config 
+  128  yum install gcc gcc-c++ autoconf glibc glibc-devel curl curl-devel ncurses ncurses-devel
+  129  history 
+  130  yum install rpm-build
+  131  yum install wget
+  132  history 
+  133  yum list | grep jenkins
+  134  yum install jenkins.noarch
+  135  yum install java
+  136  systemctl start jenkins
+  137  systemctl enable jenkins
+  138  history 
+  139  systemctl stop firewalld.service
+  140  iptables -F
+  141  iptables -X
+  143  systemctl status http
+  144  systemctl status httpd
+  145  rpm -qa | grep http
+  146  systemctl status jenkins
+  149  cd /root/liyang/package_ci/
+  150  ll
+  151  ll plugins/
+  152  ll /var/lib/jenkins/plugins/
+  153  mv /var/lib/jenkins/plugins/ /var/lib/jenkins/plugins_bak
+  154  cp -r plugins/ /var/lib/jenkins/
+  155  chown -R jenkins:jenkins /var/lib/jenkins/plugins
+  156  ll /var/lib/jenkins/plugins/
+  157  systemctl restart jenkins
+  158  cd /var/lib/jenkins/jobs/
+  159  ll
+  160  cd ..
+  161  ll
+  162  cd jobs/
+  163  pwd
+  164  ll
+  165  chown -R jenkins:jenkins *
+  166  ll
+  167  systemctl restart jenkins
+  168  cd ..
+  169  ll
+  170  cd userContent/
+  171  ll
+  172  yum install python-sphinx
+  173  yum install python-boto python-django-openstack-auth 
+  174  ll
+  175  cp -r  /root/roller/* .
+  176  ll
+  177  cd build/
+  178  vim .git/config 
+  179  ll
+  180  cd ..
+  181  ll
+  182  mkdir easystack-build
+  183  ll
+  184  mv estack-* easystack-build/
+  185  ll
+  186  mv roller-* easystack-build/
+  187  ll
+  188  mv build/ easystack-build/
+  189  mv readme.txt easystack-build/
+  190  ll
+  191  cp -r easystack-build/estack-packages/ .
+  192  cp -r easystack-build/build/ estack-build
+  193  ll
+  194  mv easystack-build/ /root/
+  195  ll
+  196  chown -R jenkins:jenkins  *
+  197  ll
+  198  ll estack-
+  199  ll estack-build/
+  200  chown -R jenkins:jenkins /var/lib/jenkins/slavekeys/
+  201  date
+  202  ll
+  203  mkdir openstack
+  204  cd openstack/
+  205  vim /etc/passwd
+  206  cd /root/.ssh/
+  207  ll
+  208  ssh-keygen 
+  209  cat id_rsa.pub 
+  210  cd /root/
+  211  ll
+  212  cd /var/lib/jenkins/
+  213  ll
+  214  cd userContent/
+  215  ll
+  216  cd /root/cinder/
+  217  vim .git/config 
+  218  cd ..
+  219  cp -r cinder/ /var/lib/jenkins/userContent/
+  220  ll
+  221  cd /var/lib/jenkins/userContent/
+  222  ll
+  223  mv cinder/ openstack/
+  224  ll
+  225  chown  -R jenkins:jenkins openstack/
+  226  ll
+  227  ll openstack/
+  228  cd ../jobs/
+  229  ll
+  230  ll | grep cinder_build_rpm/
+  231  cd cinder_build_rpm/
+  232  ll
+  233  vim config.xml 
+  234  ll
+  235  cat nextBuildNumber 
+  236  cd ..
+  237  cd ../userContent/
+  238  cd openstack/
+  239  cd cinder/
+  240  git brnach
+  241  git branch
+  242  git branch -r
+  243  git checkout -tb stable/liberty origin/stable/liberty
+  244  su jenkins
+  245  history 
+  246  vim /etc/passwd
+  247  passwd jenkins
+  248  ps -ef | grep jenkins
+  249  ll /home/jenkins/
+  250  su jenkins
+  251  cd ~
+  252  pwd
+  253  su jenkins
+  254  echo $?
+  255  cd /home/jenkins/
+  256  ll
+  257  cd .ssh/
+  258  ll
+  259  cat id_rsa.pub 
+  260  cd ..
+  261  ll
+  262  pwd
+  263  su jenkis
+  264  su jenkins
+  265  ll /etc/yum.repos.d
+  266  ps -ef | grep yum
+  267  cat /etc/yum.repos.d/172.17.141.161-44444-openstack-liberty.repo 
+  268  ps -ef | grep yum
+  269  pwd
+  270  cd /var/lib/jenkins/
+  271  ll
+  272  cd userContent/
+  273  ll
+  274  cd openstack/cinder/
+  275  ll
+  276  cat test-requirements.txt 
+  277  cd ..
+  278  ll
+  279  cd ..
+  280  ll
+  281  updatedb 
+  282  locate rpm-requirements
+  283  locate requirement
+  284  locate test-requirement
+  285  clear
+  286  locate test-requirement
+  287  locate rpm-requirement
+  288  ps -ef | grep yum
+  289  yum install python-glanceclient 
+  290  yum install intltool 
+  291  yum install python-d2to1 
+  292  yum install python-eventlet
+  293  cd /root/
+  294  cat rpm-requirements.txt 
+  295  for i in `cat rpm-requirements.txt`; do echo "install $i..."; yum install -y $i; done 
+  296  yum install python-crypto-2.6.1-1.el7.centos.x86_64
+  297  for i in `cat rpm-requirements.txt`; do echo "install $i..."; yum install -y $i; done;
+  298  yum install python-rfc3986-0.2.0-1.el7.noarch
+  299  for i in `cat rpm-requirements.txt`; yum install -y $i; done;
+  300  for i in `cat rpm-requirements.txt`;yum install -y $i;done;
+  301  for i in `cat rpm-requirements.txt`;do yum install -y $i;done;
+  302  vim install.py
+  303  ll
+  304  vim install.py
+  305  for i in `cat rpm-requirements.txt`;do yum install -y $i;done;
+  306  for i in `cat rpm-requirements.txt`;do; yum install -y $i;done;
+  307  vim install.py
+  308  ll
+  309  vim install.py
+  310  python
+  311  yum install nspr-4.10.8-1.el7_1.x86_64
+  312  yum install python-rfc3986-0.2.0-1.el7.noarch
+  313  python
+  314  vim install.py
+  315  python install.py 
+  316  for i in `cat rpm-requirements.txt`;do; yum install -y $i; sleep 10; done;
+  317  for i in `cat rpm-requirements.txt`;do yum install -y $i; sleep 10; done;
+  318  yum install python-rfc3986-0.2.0-1.el7.noarch
+  319  rpm -e python-rfc3986-0.2.0-1.el7.noarch
+  320  for i in `cat rpm-requirements.txt`;do yum install -y $i; sleep 10; done;
+  321  cat rpm-requirements.txt
+  322  vim  rpm-requirements.txt
+  323  ll
+  324  for i in `cat rpm-requirements.txt`;do echo $i; sleep 10; done;
+  325  for i in `cat rpm-requirements.txt`;do echo $i; yum install $i; sleep 10; done;
+  326  rpm -qa | grep rfc
+  327  rpm -e python-rfc3986-0.2.0-1.el7.noarch
+  328  rpm -qa | grep rfc
+  329  for i in `cat rpm-requirements.txt`;do echo $i; yum install $i; sleep 10; done;
+  330  rpm -qa | grep rfc
+  331  yum install python-rfc3986-0.2.0-1.el7.noarch
+  332  for i in `cat rpm-requirements.txt`;do echo $i; yum -y install $i; sleep 10; done;
+  333  cat rpm-requirements.txt
+  334  head rpm-requirements.txt
+  335  head 10 rpm-requirements.txt
+  336  head -10 rpm-requirements.txt
+  337  man head
+  338  head -n 10 rpm-requirements.txt
+  339  yum install python-rfc3986-0.2.0-1.el7.noarch
+  340  for i in `cat rpm-requirements.txt`;do echo $i; yum -y install $i; sleep 5; done;    
+  341  cat rpm-requirements.txt | wc -l
+  342  vim rpm-requirements.txt
+  343  vim install.py 
+  344  diff rpm-requirements.txt rpm-requirements.txt.2 
+  345  file rpm-requirements.txt
+  346  file rpm-requirements.txt.2
+
+vim /usr/lib/rpm/macros
+1079 %{__git} commit %{-q} --allow-empty -a\\\
